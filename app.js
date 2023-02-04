@@ -1,8 +1,24 @@
 const cols = document.querySelectorAll('.col');
 const btn = document.querySelector('.btn')
+const opens = document.querySelectorAll('.lock')
 
-document.addEventListener('keydown', (Event) =>{
-    if(Event.code.toLocaleLowerCase() === 'space'){
+document.addEventListener('click',(e) =>{
+    const type = e.target.dataset.type
+
+    if(type === 'lock'){
+        const node = e.target.tagName.toLocaleLowerCase() === 'i'
+        ? e.target : e.target.children[0]
+
+        node.classList.toggle('fa-lock-open')
+        node.classList.toggle('fa-lock')
+    }
+})
+
+
+
+document.addEventListener('keydown', (event) =>{
+    event.preventDefault()
+    if(event.code.toLocaleLowerCase() === 'space'){
         setRandomColors()
     
     }
@@ -40,12 +56,16 @@ function gerenerateRandomColor(){
     return '#' + color
 }
 
-
 function setRandomColors(){
     cols.forEach((col) => {
+        const isLocked = col.querySelector('i').classList.contains('fa-lock')
         const text = col.querySelector('h2')
         const button = col.querySelector('button')
         const color = chroma.random()
+
+        if(isLocked){
+            return
+        }
         
         text.textContent = color
         col.style.background = color
